@@ -1,5 +1,55 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/postgres
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "name": "HomeDNA",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "hostRequirements": {
+    "cpus": 2
+  },
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "pip install --user -r requirements.txt",
+  "waitFor": "onCreateCommand",
+  "updateContentCommand": "pip install -r homedna/requirements.txt && python homedna/manage.py migrate",
+  "postCreateCommand": "",
+  "postAttachCommand": {
+    "server": "python homedna/manage.py runserver"
+  },
+  // Configure tool-specific properties.
+  // "customizations": {},
+  "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "hello_world/templates/index.html"
+      ]
+    },
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "portsAttributes": {
+    "8000": {
+      "label": "Application",
+      "onAutoForward": "openPreview"
+    }
+  },
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // This can be used to network with other containers or the host.
+  // "forwardPorts": [5000, 5432],
+  "forwardPorts": [
+    8000,
+    5432
+  ],
+  // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
-  }
+    "ghcr.io/devcontainers/features/sshd:1": {
+      "version": "latest"
+    }
+  },
+  // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+  // "remoteUser": "root"
 }
